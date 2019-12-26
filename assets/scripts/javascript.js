@@ -26,101 +26,180 @@ class Question {
     this.answer = answer;
   }
 }
+
 questionArray.push(new Question("Commonly used data types DO NOT include:", ["strings", "booleans", "alerts", "numbers"], "alerts"));
 questionArray.push(new Question("The condition in an if / else statement is enclosed within ____.", ["quotes", "curly brackets", "parentheses", "square brackets"], "parentheses"));
-var counter = questionArray.length* 5;
+
+var highScores = [];
+class scoreBoardEntry {
+  constructor(scoreInitials, scoreEntry) {
+    this.scoreInitials = scoreInitials;
+    this.scoreEntry = scoreEntry;
+  }
+}
+highScores.push(new scoreBoardEntry("bob", 500));
+highScores.push(new scoreBoardEntry("joe", 200));
+
+var counter = questionArray.length * 5;
 var currentQuestion;
+var score;
+var correctQuestions;
+var interval;
+var newHighScore;
+var highScoreInitials;
 
 
 //initials information
+var scoreSpanEl = $("#submit-score");
 var initialsFormEl = $("#initials-form");
+var initialsEl = $("#initials");
+var questionIndex = 0;
+
+//scoreboard items
+var highScoresEl = $("#high-scores");
 
 
-$(function() {
+$(function () {
 
-  function toggleVisibility(offEl,onEl){
-    offEl.toggleClass("d-none",true);
-    offEl.toggleClass("d-block",false);
-    onEl.toggleClass("d-none",false);
-    onEl.toggleClass("d-block",true);
+  function toggleVisibility(offEl, onEl) {
+    offEl.toggleClass("d-none", true);
+    offEl.toggleClass("d-block", false);
+    onEl.toggleClass("d-none", false);
+    onEl.toggleClass("d-block", true);
   }
-    
 
-    function setTimerText(){
-        counter--;
-        timerEL.text(counter);
+
+  function setTimerText() {
+    counter--;
+    timerEL.text(counter);
+  }
+
+  function startQuiz() {
+    counter = questionArray.length * 5;
+    questionIndex = 0;
+    correctQuestions = 0;
+    score = 0;
+    toggleVisibility(instructionViewEl, questionViewEl);
+    interval = setInterval(setTimerText, 1000)
+    loadQuestion();
+  }
+
+
+  function loadQuestion() {
+    currentQuestion = questionArray[questionIndex];
+    questionTitleEl.text(currentQuestion.title);
+    questionChoiceEl.text("");
+
+    for (var i = 0; i < currentQuestion.choices.length; i++) {
+      questionChoiceEl.append("<li><button data-index=" + i + ">" + currentQuestion.choices[i] + "</button></li>");
     }
 
-    function startQuiz(){
-      questionIndex = 0;
-      toggleVisibility(instructionViewEl,questionViewEl);
-      setInterval(setTimerText,1000)
+  }
+
+
+  questionChoiceEl.click(checkAnswer);
+
+  function checkAnswer(event) {
+    var element = event.target;
+    var correctAnswer = currentQuestion.answer;
+    incorrectAnswerEl.text("Incorrect. The correct answer is: " + correctAnswer);
+    if (element.matches("button")) {
+      if (currentQuestion.choices[element.dataset.index] === correctAnswer) {
+        correctAnswerEl.removeClass("d-none").hide().fadeIn(1000, function () {
+          correctQuestions++;
+          correctAnswerEl.addClass("d-none");
+          incrementQuestion();
+        });
+      }
+      else {
+        incorrectAnswerEl.removeClass("d-none").hide().fadeIn(1000, function () {
+          incorrectAnswerEl.addClass("d-none");
+          incrementQuestion();
+        });
+
+      }
+
+    }
+
+
+
+  }
+
+  function incrementQuestion() {
+    questionIndex++;
+
+    if (questionIndex !== questionArray.length) {
       loadQuestion();
     }
+    else {
 
-    var questionIndex = 0;
+      score = counter * 100 + correctQuestions * 200;
 
-    function loadQuestion(){
-      currentQuestion = questionArray[questionIndex];
-      questionTitleEl.text(currentQuestion.title);
-      questionChoiceEl.text("");
 
-      for(var i=0;i<currentQuestion.choices.length;i++){
-        questionChoiceEl.append("<li><button data-index="+i+">" + currentQuestion.choices[i]+ "</button></li>");
-      }
+      toggleVisibility(questionViewEl, submitScoreViewEl);
+      scoreSpanEl.text(score);
+
+
+
+      clearInterval(interval);
 
     }
 
 
-    questionChoiceEl.click(checkAnswer);
 
-    function checkAnswer(event){
-      var element = event.target;
-      if(element.matches("button")){
-        if(currentQuestion.choices[element.dataset.index]===currentQuestion.answer){
-          correctAnswerEl.removeClass("d-none").hide().fadeIn(1000,function(){
-            correctAnswerEl.addClass("d-none");
-            incrementQuestion();
-          });
+  }
+
+  function getHighScoreView(event) {
+    event.preventDefault();
+    highScoreInitials = initialsEl.val();
+    console.log(initialsEl.val());
+    console.log(highScoreInitials);
+    newHighScore = new scoreBoardEntry(highScoreInitials, score);
+
+    var scoreboard = JSON.parse(localStorage.getItem("scoreboard"));
+    highScoresEl.html("");
+    var entered = false;
+    console.log("newHighScore" + newHighScore.scoreInitials);
+    scoreboard.forEach((highScore, index, arr) => {
+
+      if (score > highScore.scoreEntry && !entered) {
+        highScoresEl.append("<li>" + newHighScore.scoreInitials + " - " + newHighScore.scoreEntry + "</li>");
+        highScoresEl.append("<li>" + highScore.scoreInitials + " - " + highScore.scoreEntry + "</li>");
+        arr.splice(index, 0, newHighScore);
+        console.log(arr);
+        if (scoreboard.length > 9) {
+          arr.pop();
         }
-        else{
-          incorrectAnswerEl.removeClass("d-none").hide().fadeIn(1000, function(){
-            incorrectAnswerEl.text("Incorrect. The correct answer is: "+ currentQuestion.answer);
-            incorrectAnswerEl.addClass("d-none");
-            incrementQuestion();
-          });
-
-        }
-
+        localStorage.setItem("scoreboard", JSON.stringify(arr));
+        entered = true;
+      }
+      else {
+        highScoresEl.append("<li>" + highScore.scoreInitials + " - " + highScore.scoreEntry + "</li>");
       }
 
 
-
+    });
+    if (entered === false && scoreboard.length < 9) {
+      highScoresEl.append("<li>" + newHighScore.scoreInitials + " - " + newHighScore.scoreEntry + "</li>");
+      scoreboard.push(newHighScore);
+      localStorage.setItem("scoreboard", JSON.stringify(scoreboard));
     }
 
-    function incrementQuestion(){
-      questionIndex++;
+    toggleVisibility(submitScoreViewEl, highScoreViewEl);
 
-      if(questionIndex!==questionArray.length){
-        loadQuestion();
-      }
-      else{
-        toggleVisibility(questionViewEl,submitScoreViewEl);
-      }
+  }
 
 
+  initialsFormEl.on("submit", getHighScoreView)
+  quizStartEl.on("click", startQuiz)
 
-    }
+  $("#reset-high-scores").click(function () {
+    highScoresEl.html("");
+    localStorage.setItem("scoreboard", "[]");
+  });
 
-    function getHighScoreView(event){
-      event.preventDefault();
-      toggleVisibility(submitScoreViewEl,highScoreViewEl);
-    }
-
-    
-
-
-    initialsFormEl.on("submit",getHighScoreView)
-    quizStartEl.on("click",startQuiz)
+  $("#retry").click(function () {
+    toggleVisibility(highScoreViewEl, instructionViewEl);
+  });
 
 });
