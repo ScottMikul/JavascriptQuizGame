@@ -156,7 +156,11 @@ $(function () {
     console.log(highScoreInitials);
     newHighScore = new scoreBoardEntry(highScoreInitials, score);
 
+
     var scoreboard = JSON.parse(localStorage.getItem("scoreboard"));
+    if(scoreboard ===null){
+      scoreboard = [];
+    }
     highScoresEl.html("");
     var entered = false;
     console.log("newHighScore" + newHighScore.scoreInitials);
