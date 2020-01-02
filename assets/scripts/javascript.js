@@ -1,5 +1,6 @@
 var timerEL = $("#timer");
 var quizStartEl = $("#quiz-start");
+var highscorebuttonEl = $("#view-high-score-button");
 
 
 //views:
@@ -29,7 +30,11 @@ class Question {
 
 questionArray.push(new Question("Commonly used data types DO NOT include:", ["strings", "booleans", "alerts", "numbers"], "alerts"));
 questionArray.push(new Question("The condition in an if / else statement is enclosed within ____.", ["quotes", "curly brackets", "parentheses", "square brackets"], "parentheses"));
-
+//questionArray.push(new Question("Inside which HTML element do we put the JavaScript?",["\<script\>", "\<javascript\>","\<scripting\>","\<js\>\</js\>"],"\<script\>"));
+questionArray.push(new Question("Where is the correct place to insert a JavaScript?",["Both the <head> section and the <body> section are correct", 
+"The <head> section","The <body> section"],"Both the <head> section and the <body> section are correct"));
+/*questionArray.push(new Question("What is the correct syntax for referring to an external script called \"xxx.js\"?",["<script src=\"xxx.js\"> ",
+"<script name=\"xxx.js\">","<script href=\"xxx.js\">"],"Both the <head> section and the <body> section are correct"));*/
 var highScores = [];
 class scoreBoardEntry {
   constructor(scoreInitials, scoreEntry) {
@@ -37,10 +42,8 @@ class scoreBoardEntry {
     this.scoreEntry = scoreEntry;
   }
 }
-highScores.push(new scoreBoardEntry("bob", 500));
-highScores.push(new scoreBoardEntry("joe", 200));
 
-var counter = questionArray.length * 5;
+var counter ;
 var currentQuestion;
 var score;
 var correctQuestions;
@@ -72,15 +75,23 @@ $(function () {
   function setTimerText() {
     counter--;
     timerEL.text(counter);
+    if(counter<=0){
+      score =  correctQuestions * 200;
+      toggleVisibility(questionViewEl, submitScoreViewEl);
+      scoreSpanEl.text(score);
+      counter =0 ;
+      clearInterval(interval);
+    }
   }
 
   function startQuiz() {
-    counter = questionArray.length * 5;
+    counter = questionArray.length * 10;
     questionIndex = 0;
     correctQuestions = 0;
     score = 0;
     toggleVisibility(instructionViewEl, questionViewEl);
-    interval = setInterval(setTimerText, 1000)
+    interval = setInterval(setTimerText, 1000);
+    highscorebuttonEl.hide();
     loadQuestion();
   }
 
@@ -113,8 +124,10 @@ $(function () {
       }
       else {
         incorrectAnswerEl.removeClass("d-none").hide().fadeIn(1000, function () {
+          counter -=5;
           incorrectAnswerEl.addClass("d-none");
           incrementQuestion();
+
         });
 
       }
@@ -128,7 +141,7 @@ $(function () {
   function incrementQuestion() {
     questionIndex++;
 
-    if (questionIndex !== questionArray.length) {
+    if (questionIndex !== questionArray.length ) {
       loadQuestion();
     }
     else {
@@ -204,6 +217,9 @@ $(function () {
 
   $("#retry").click(function () {
     toggleVisibility(highScoreViewEl, instructionViewEl);
+    $("#view-high-score-button").show();
   });
+
+ 
 
 });
