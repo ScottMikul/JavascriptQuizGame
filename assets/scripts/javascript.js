@@ -30,11 +30,22 @@ class Question {
 
 questionArray.push(new Question("Commonly used data types DO NOT include:", ["strings", "booleans", "alerts", "numbers"], "alerts"));
 questionArray.push(new Question("The condition in an if / else statement is enclosed within ____.", ["quotes", "curly brackets", "parentheses", "square brackets"], "parentheses"));
-//questionArray.push(new Question("Inside which HTML element do we put the JavaScript?",["\<script\>", "\<javascript\>","\<scripting\>","\<js\>\</js\>"],"\<script\>"));
-questionArray.push(new Question("Where is the correct place to insert a JavaScript?",["Both the <head> section and the <body> section are correct", 
-"The <head> section","The <body> section"],"Both the <head> section and the <body> section are correct"));
-/*questionArray.push(new Question("What is the correct syntax for referring to an external script called \"xxx.js\"?",["<script src=\"xxx.js\"> ",
-"<script name=\"xxx.js\">","<script href=\"xxx.js\">"],"Both the <head> section and the <body> section are correct"));*/
+questionArray.push(new Question("Where is the correct place to insert a JavaScript?",["Both the head section and the body section are correct", 
+"The head section","The body section"],"Both the head section and the body section are correct"));
+questionArray.push(new Question("Which of the following is not an object primitive? ", ["number","undefined","string","function"],"function"));
+questionArray.push(new Question("which of the following is not a reserved word? ", ["interface","throws","program","short"],"program"));
+questionArray.push(new Question("What is the difference between == and ===? ", ["=== will always work and == won't",
+"== doesn't care about the object types and === does","one is a way to assign twice one assigns a value 3 times.","there is no difference it's a trick question"],"== doesn't care about the object types and === does"));
+questionArray.push(new Question("WHat is the '!' symbol used for in javascript? ", ["add emphasis","a 'not' sign","error tracking","makes something true"],"a 'not' sign"));
+questionArray.push(new Question("what does the expression (1 & 1) return? ", ["true","false","error you can't use single '&'s"],"true"));
+questionArray.push(new Question("What is the html data attribute used for? ", ["html doesn't have data attributes","store data on the html element",
+"data attributes store things like the image source"],"store data on the html element"));
+questionArray.push(new Question("Is putting a function in an array is possible? ", ["no, and why would you ever want to try that",
+"yes. Even if statements can be put into arrays.","No. Just no.","Yes it is possible. But why would you ever want to do that"],"Yes it is possible. But why would you ever wand to do that"));
+
+
+
+
 var highScores = [];
 class scoreBoardEntry {
   constructor(scoreInitials, scoreEntry) {
