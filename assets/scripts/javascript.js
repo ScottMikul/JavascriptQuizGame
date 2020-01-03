@@ -41,7 +41,7 @@ questionArray.push(new Question("what does the expression (1 & 1) return? ", ["t
 questionArray.push(new Question("What is the html data attribute used for? ", ["html doesn't have data attributes","store data on the html element",
 "data attributes store things like the image source"],"store data on the html element"));
 questionArray.push(new Question("Is putting a function in an array is possible? ", ["no, and why would you ever want to try that",
-"yes. Even if statements can be put into arrays.","No. Just no.","Yes it is possible. But why would you ever want to do that"],"Yes it is possible. But why would you ever wand to do that"));
+"yes. Even if statements can be put into arrays.","No. Just no.","Yes it is possible. But why would you ever want to do that"],"Yes it is possible. But why would you ever want to do that"));
 
 
 
