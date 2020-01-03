@@ -36,7 +36,7 @@ questionArray.push(new Question("Which of the following is not an object primiti
 questionArray.push(new Question("which of the following is not a reserved word? ", ["interface","throws","program","short"],"program"));
 questionArray.push(new Question("What is the difference between == and ===? ", ["=== will always work and == won't",
 "== doesn't care about the object types and === does","one is a way to assign twice one assigns a value 3 times.","there is no difference it's a trick question"],"== doesn't care about the object types and === does"));
-questionArray.push(new Question("WHat is the '!' symbol used for in javascript? ", ["add emphasis","a 'not' sign","error tracking","makes something true"],"a 'not' sign"));
+questionArray.push(new Question("What is the '!' symbol used for in javascript? ", ["add emphasis","a 'not' sign","error tracking","makes something true"],"a 'not' sign"));
 questionArray.push(new Question("what does the expression (1 & 1) return? ", ["true","false","error you can't use single '&'s"],"true"));
 questionArray.push(new Question("What is the html data attribute used for? ", ["html doesn't have data attributes","store data on the html element",
 "data attributes store things like the image source"],"store data on the html element"));
