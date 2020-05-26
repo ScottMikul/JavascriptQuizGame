@@ -1,5 +1,6 @@
 var timerEL = $("#timer");
 var quizStartEl = $("#quiz-start");
+var highscorebuttonEl = $("#view-high-score-button");
 
 
 //views:
@@ -29,6 +30,21 @@ class Question {
 
 questionArray.push(new Question("Commonly used data types DO NOT include:", ["strings", "booleans", "alerts", "numbers"], "alerts"));
 questionArray.push(new Question("The condition in an if / else statement is enclosed within ____.", ["quotes", "curly brackets", "parentheses", "square brackets"], "parentheses"));
+questionArray.push(new Question("Where is the correct place to insert a JavaScript?",["Both the head section and the body section are correct", 
+"The head section","The body section"],"Both the head section and the body section are correct"));
+questionArray.push(new Question("Which of the following is not an object primitive? ", ["number","undefined","string","function"],"function"));
+questionArray.push(new Question("which of the following is not a reserved word? ", ["interface","throws","program","short"],"program"));
+questionArray.push(new Question("What is the difference between == and ===? ", ["=== will always work and == won't",
+"== doesn't care about the object types and === does","one is a way to assign twice one assigns a value 3 times.","there is no difference it's a trick question"],"== doesn't care about the object types and === does"));
+questionArray.push(new Question("What is the '!' symbol used for in javascript? ", ["add emphasis","a 'not' sign","error tracking","makes something true"],"a 'not' sign"));
+questionArray.push(new Question("what does the expression (1 & 1) return? ", ["true","false","error you can't use single '&'s"],"true"));
+questionArray.push(new Question("What is the html data attribute used for? ", ["html doesn't have data attributes","store data on the html element",
+"data attributes store things like the image source"],"store data on the html element"));
+questionArray.push(new Question("Is putting a function in an array is possible? ", ["no, and why would you ever want to try that",
+"yes. Even if statements can be put into arrays.","No. Just no.","Yes it is possible. But why would you ever want to do that"],"Yes it is possible. But why would you ever want to do that"));
+
+
+
 
 var highScores = [];
 class scoreBoardEntry {
@@ -37,10 +53,8 @@ class scoreBoardEntry {
     this.scoreEntry = scoreEntry;
   }
 }
-highScores.push(new scoreBoardEntry("bob", 500));
-highScores.push(new scoreBoardEntry("joe", 200));
 
-var counter = questionArray.length * 5;
+var counter ;
 var currentQuestion;
 var score;
 var correctQuestions;
@@ -72,15 +86,23 @@ $(function () {
   function setTimerText() {
     counter--;
     timerEL.text(counter);
+    if(counter<=0){
+      score =  correctQuestions * 200;
+      toggleVisibility(questionViewEl, submitScoreViewEl);
+      scoreSpanEl.text(score);
+      counter =0 ;
+      clearInterval(interval);
+    }
   }
 
   function startQuiz() {
-    counter = questionArray.length * 5;
+    counter = questionArray.length * 10;
     questionIndex = 0;
     correctQuestions = 0;
     score = 0;
     toggleVisibility(instructionViewEl, questionViewEl);
-    interval = setInterval(setTimerText, 1000)
+    interval = setInterval(setTimerText, 1000);
+    highscorebuttonEl.hide();
     loadQuestion();
   }
 
@@ -113,8 +135,10 @@ $(function () {
       }
       else {
         incorrectAnswerEl.removeClass("d-none").hide().fadeIn(1000, function () {
+          counter -=5;
           incorrectAnswerEl.addClass("d-none");
           incrementQuestion();
+
         });
 
       }
@@ -128,7 +152,7 @@ $(function () {
   function incrementQuestion() {
     questionIndex++;
 
-    if (questionIndex !== questionArray.length) {
+    if (questionIndex !== questionArray.length ) {
       loadQuestion();
     }
     else {
@@ -204,6 +228,9 @@ $(function () {
 
   $("#retry").click(function () {
     toggleVisibility(highScoreViewEl, instructionViewEl);
+    $("#view-high-score-button").show();
   });
+
+ 
 
 });
